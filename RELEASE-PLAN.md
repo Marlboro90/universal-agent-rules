@@ -201,3 +201,35 @@ git add -A && git commit -m "feat: <一句话>" && git push
 git tag -a v0.1.1 -m "v0.1.1" && git push origin v0.1.1
 gh repo edit --add-topic ai-rules --add-topic claude-code --add-topic codex
 ```
+
+---
+
+## 附：现在就推（复制粘贴即可）
+
+本地首发已完成：分支 `main`、标签 `v0.1.0`、49 个文件（`git log` 可查）。剩下三步在**你自己的终端**执行：
+
+```bash
+# 0) 若 git 提示 Xcode 许可（本机 /usr/bin/git 有此问题，Xcode.app 内嵌的可用）
+sudo xcodebuild -license accept
+# 或直接用：/Applications/Xcode.app/Contents/Developer/usr/bin/git
+
+# 1) 建仓并推送（没有 gh 就先装：brew install gh && gh auth login）
+cd ~/Documents/agent-rules
+gh repo create universal-agent-rules --public --source=. --remote=origin --push
+git push origin v0.1.0
+gh release create v0.1.0 --title "v0.1.0" --generate-notes
+
+# 2) 仓库设置（提升可发现性）
+gh repo edit \
+  --description "One ruleset for every AI coding assistant — Claude / Codex / Cursor / Trae / OpenClaw / ChatGPT / Doubao. Write once in core/, generate everywhere." \
+  --add-topic ai-rules --add-topic agent-rules --add-topic claude-code \
+  --add-topic codex --add-topic cursor --add-topic prompt-engineering --add-topic agents-md
+
+# 3) Gitee 镜像（单向同步）
+#    a. ssh-keygen -t ed25519 -C "gitee-mirror"，公钥加到 https://gitee.com/profile/sshkeys
+#    b. 生成令牌 https://gitee.com/profile/personal_access_tokens
+#    c. GitHub 仓库 Settings → Secrets 添加：GITEE_USER / GITEE_PRIVATE_KEY / GITEE_TOKEN
+#    d. 推一次 main 触发 .github/workflows/gitee-sync.yml，检查 Actions 是否绿
+```
+
+**推完立刻验证三件事**：Actions 的 `build-check` 绿；README 首屏平台矩阵渲染正常；Gitee 上提交数与 GitHub 一致。

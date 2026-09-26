@@ -1,36 +1,51 @@
 #!/usr/bin/env bash
-# 首次发布：初始化仓库 → 提交 → 打 v0.1.0 标签
-# 前置：git 可用（macOS 若提示 Xcode 许可，先跑 `sudo xcodebuild -license accept`）
-# 用法：bash scripts/first-publish.sh
+# 首次发布：重新生成 → 漂移校验 → 提交（如已有改动）→ 打标签
+# 用法：bash scripts/first-publish.sh        TAG=v0.1.1 bash scripts/first-publish.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 REPO_NAME="${REPO_NAME:-universal-agent-rules}"
 TAG="${TAG:-v0.1.0}"
 
-command -v git >/dev/null || { echo "✖ 未找到 git"; exit 1; }
-git --version >/dev/null 2>&1 || { echo "✖ git 被 Xcode 许可协议阻断，先跑：sudo xcodebuild -license accept"; exit 1; }
+# 挑一个能用的 git：系统 git 可能提示 "You have not agreed to the Xcode license"
+GIT=""
+for cand in git /Applications/Xcode.app/Contents/Developer/usr/bin/git /usr/bin/git; do
+  if command -v "$cand" >/dev/null 2>&1 && "$cand" --version >/dev/null 2>&1; then
+    GIT="$cand"; break
+  fi
+done
+[ -n "$GIT" ] || { echo "✖ 没有可用的 git。终端执行：sudo xcodebuild -license accept"; exit 1; }
+echo "使用 git: $GIT ($("$GIT" --version))"
 
 echo "→ 重新生成平台文件"
 python3 scripts/build.py
 echo "→ 漂移校验"
 python3 scripts/build.py --check
 
-if [ ! -d .git ]; then
-  git init -b main
+[ -d .git ] || "$GIT" init -b main
+
+"$GIT" add -A
+if "$GIT" diff --cached --quiet; then
+  echo "（无新改动，跳过提交）"
+else
+  "$GIT" status --short | head -40
+  read -r -p "确认提交？[y/N] " ok
+  [ "$ok" = "y" ] || { echo "已取消"; exit 0; }
+  "$GIT" commit -m "feat: universal agent ruleset $TAG"
 fi
 
-git add -A
-git status --short | head -40
-echo
-read -r -p "确认提交？[y/N] " ok
-[ "$ok" = "y" ] || { echo "已取消"; exit 0; }
+if "$GIT" rev-parse "$TAG" >/dev/null 2>&1; then
+  echo "（标签 $TAG 已存在，跳过）"
+else
+  "$GIT" tag -a "$TAG" -m "$TAG"
+fi
 
-git commit -m "feat: universal agent ruleset v0.1.0 (Claude/Codex/Cursor/Trae/OpenClaw/ChatGPT/Doubao)"
-git tag -a "$TAG" -m "$TAG: 首个公开版本（7 平台适配 + 2 个可跑示例）"
+cat <<EOF
 
-echo
-echo "✓ 本地就绪。接下来在 GitHub 建仓库并推送（需 gh）："
-echo "    gh repo create $REPO_NAME --public --source=. --remote=origin --push"
-echo "    git push origin $TAG"
-echo "    gh release create $TAG --title '$TAG' --generate-notes"
+✓ 本地就绪（分支 $("$GIT" branch --show-current)，标签 $TAG）
+
+推送到 GitHub（需 gh 且已登录；没有就先装：brew install gh）：
+    gh repo create $REPO_NAME --public --source=. --remote=origin --push
+    git push origin $TAG
+    gh release create $TAG --title "$TAG" --generate-notes
+EOF
