@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 规则讨论与提问
+    url: https://github.com/marlboro90/universal-agent-rules/discussions
+    about: 不确定该不该写成规则、或想讨论取舍，来 Discussions
+  - name: 平台不生效？先看适配速查
+    url: https://github.com/marlboro90/universal-agent-rules/blob/main/RELEASE-PLAN.md
+    about: RELEASE-PLAN.md 第 2 节列出各平台读取位置与字数上限

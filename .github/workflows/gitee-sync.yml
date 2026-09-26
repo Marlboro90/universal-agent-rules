@@ -1,0 +1,26 @@
+name: gitee-sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:      # 允许在 Actions 页面手动触发一次
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Mirror GitHub → Gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/${{ github.repository_owner }}
+          dst: gitee/${{ secrets.GITEE_USER }}
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          static_list: ${{ github.event.repository.name }}
+          clone_style: ssh
+          force_update: true
+          timeout: 600s
+        # 需要的仓库 Secrets：GITEE_USER / GITEE_PRIVATE_KEY / GITEE_TOKEN

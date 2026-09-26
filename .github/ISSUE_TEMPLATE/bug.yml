@@ -1,0 +1,21 @@
+name: 缺陷报告
+description: 构建脚本、生成物或文档的问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      value: |
+        1. python3 scripts/build.py
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 环境
+      placeholder: 操作系统 / Python 版本
+    validations:
+      required: true

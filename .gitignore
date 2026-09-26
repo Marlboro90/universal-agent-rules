@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+CLAUDE.local.md
+*.log
+.workbuddy/   # 本地工作记忆，不进公开仓库

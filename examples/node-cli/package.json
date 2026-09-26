@@ -1,0 +1,11 @@
+{
+  "name": "node-cli-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "node --check src/cli.js",
+    "test": "node --test \"test/**/*.test.js\"",
+    "selftest": "node src/cli.js --selftest"
+  }
+}

@@ -1,0 +1,32 @@
+name: 规则建议
+description: 建议新增或修改一条通用规则（会进入 core/）
+title: "[规则] "
+labels: ["rule", "enhancement"]
+body:
+  - type: textarea
+    id: rule
+    attributes:
+      label: 建议的规则内容
+      description: 写成可验证的一句话，例如「缩进 2 空格」而不是「格式规范」
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 为什么需要这条规则
+      description: 踩过什么坑？不写原因的规则遵循率明显更低
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: 应该放进 core 的哪个文件
+      options:
+        - 00-principles（通用原则）
+        - 10-workflow（任务工作流）
+        - 20-code-style（代码风格）
+        - 30-output-format（输出格式）
+        - 40-safety（安全与隐私红线）
+        - 不确定，请帮我判断
+    validations:
+      required: true

@@ -1,0 +1,24 @@
+name: 平台适配
+description: 报告某个平台读不到规则，或申请新增平台支持
+title: "[平台] "
+labels: ["platform"]
+body:
+  - type: input
+    id: platform
+    attributes:
+      label: 平台与版本
+      placeholder: 例：Cursor 0.52 / Trae 2.1 / Codex CLI 0.30
+    validations:
+      required: true
+  - type: textarea
+    id: symptom
+    attributes:
+      label: 现象
+      description: 复制了哪些文件、放到哪里、AI 的实际表现
+    validations:
+      required: true
+  - type: textarea
+    id: doc
+    attributes:
+      label: 该平台官方文档依据（如有）
+      description: 平台可能改了读取规则，附上文档链接便于核对
