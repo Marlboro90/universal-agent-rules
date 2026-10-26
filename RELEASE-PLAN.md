@@ -144,11 +144,16 @@ $GIT push origin v0.1.0
 
 ### Step 10 — Gitee 仓库与镜像同步
 
-1. 生成 SSH 密钥对：`ssh-keygen -t ed25519 -C "gitee-mirror"`；公钥加到 [Gitee SSH 公钥](https://gitee.com/profile/sshkeys)。
-2. 生成 Gitee 私人令牌（需要 `projects` 权限）：https://gitee.com/profile/personal_access_tokens
-3. 在 GitHub 仓库 Settings → Secrets 添加：`GITEE_USER`、`GITEE_PRIVATE_KEY`（私钥全文）、`GITEE_TOKEN`。
-4. **创建/提交**：`.github/workflows/gitee-sync.yml`（已生成，用 `Yikun/hub-mirror-action@master`，`force_update: true`）。
+1. 生成 Gitee 私人令牌（需要 `projects` 权限）：https://gitee.com/profile/personal_access_tokens
+2. 在 GitHub 仓库 Settings → Secrets 添加两个即可：`GITEE_USER`、`GITEE_TOKEN`。
+   `.github/workflows/gitee-sync.yml` 用的是 **HTTPS + 令牌直推**（`git push gitee refs/remotes/origin/*:refs/heads/*` + `--tags`），
+   不需要任何 SSH 私钥，也不依赖第三方 action。
+4. **创建/提交**：`.github/workflows/gitee-sync.yml`（已生成并实测通过；`push main` 与 `workflow_dispatch` 都能触发）。
 5. 首次可先用 Gitee「+ → 从 GitHub/GitLab 导入仓库」一次性导入（注意导入后默认私有，需手动改公开），之后由 Actions 持续单向同步。
+
+> 踩坑记录：早先用 `Yikun/hub-mirror-action` 会**两次**卡在 SSH：先在源端 `git clone git@github.com:...` 报 `Permission denied (publickey)`，
+> 换成 `clone_style: https` 它仍按 `git@gitee.com:` 建远端。结论是这类镜像 action 对 SSH 依赖过重，
+> 直接用「checkout + HTTPS 令牌 push」两行命令更可靠，也少一个 Secret。
 
 **验收**：push 到 main → Actions 的 `gitee-sync` 绿 → Gitee 上提交数与 GitHub 一致。
 **注意**：镜像是**单向**的（GitHub → Gitee），Gitee 侧的 issue/PR 不回流，README 需写明"请到 GitHub 提 PR"。
