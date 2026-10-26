@@ -5,4 +5,5 @@ __pycache__/
 node_modules/
 CLAUDE.local.md
 *.log
-.workbuddy/   # 本地工作记忆，不进公开仓库
+# 本地工作记忆（含私人/项目上下文），不进公开仓库
+.workbuddy/
