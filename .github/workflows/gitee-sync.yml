@@ -17,9 +17,11 @@ jobs:
         with:
           src: github/${{ github.repository_owner }}
           dst: gitee/${{ secrets.GITEE_USER }}
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_TOKEN }}
           static_list: ${{ github.event.repository.name }}
-          clone_style: https          # 令牌方式，无需上传私钥
+          clone_style: ssh
           force_update: true
           timeout: 600s
-        # 需要的仓库 Secrets：GITEE_USER / GITEE_TOKEN（令牌可在 https://gitee.com/profile/personal_access_tokens 重新生成）
+        # 需要的仓库 Secrets：GITEE_USER / GITEE_PRIVATE_KEY / GITEE_TOKEN
+        # 其中私钥是「仅用于镜像」的专用部署密钥，对应公钥已加在 Gitee 账号 SSH 公钥里
