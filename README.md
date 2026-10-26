@@ -22,11 +22,11 @@
 
 ```bash
 # 1) 文件型平台：复制到你的项目根
-curl -O https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/AGENTS.md      # Codex / Trae / Cursor
-curl -O https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/CLAUDE.md      # Claude Code
+curl -O https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/AGENTS.md      # Codex / Trae / Cursor
+curl -O https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/CLAUDE.md      # Claude Code
 mkdir -p .cursor/rules .trae/rules
-curl -o .cursor/rules/core.mdc https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/.cursor/rules/core.mdc
-curl -o .trae/rules/core.md   https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/.trae/rules/core.md
+curl -o .cursor/rules/core.mdc https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/.cursor/rules/core.mdc
+curl -o .trae/rules/core.md   https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/.trae/rules/core.md
 
 # 2) ChatGPT：复制 chatgpt/field1.txt → 第 1 栏；field2.txt → 第 2 栏（设置 → 个性化 → 自定义指令）
 

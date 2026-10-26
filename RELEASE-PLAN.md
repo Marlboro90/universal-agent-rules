@@ -69,7 +69,7 @@ python3 scripts/build.py --check    # 漂移校验（CI 同款，退出码 0/1�
 
 - **P0（已完成）**：`LICENSE` 版权人已填「吴叉叉」。如需改：`sed -i '' 's/吴叉叉/<署名>/' LICENSE`
 - 两份 README 顶部互链（`[English](README.en.md)` / `[简体中文](README.md)`）。
-- 两份 README 的 `<OWNER>/<REPO>` 已填 `marlboro90/universal-agent-rules`（共 6 处）。
+- 两份 README 的 `<OWNER>/<REPO>` 已按实际账号改为 `Marlboro90/universal-agent-rules`（共 6 处）。
 
 ### Step 6 — CI 与忽略规则
 

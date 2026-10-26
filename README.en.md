@@ -22,8 +22,8 @@ and Doubao all read the same conventions — **no duplicated maintenance**.
 ## Quick start
 
 ```bash
-curl -O https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/AGENTS.md
-curl -O https://raw.githubusercontent.com/marlboro90/universal-agent-rules/main/CLAUDE.md
+curl -O https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/AGENTS.md
+curl -O https://raw.githubusercontent.com/Marlboro90/universal-agent-rules/main/CLAUDE.md
 # ChatGPT: paste chatgpt/field1.txt into field 1, field2.txt into field 2
 # OpenClaw / WorkBuddy: drop skills/ai-agent-rules/ into skills/ or .agents/skills/
 ```
