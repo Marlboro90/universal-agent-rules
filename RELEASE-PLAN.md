@@ -96,11 +96,41 @@ git -c user.name="<you>" -c user.email="<you@example.com>" commit -m "feat: init
 
 **提交的文件**：Step 1–6 全部内容（含生成物 `AGENTS.md`、`CLAUDE.md`、`.cursor/`、`.trae/`、`skills/`、`chatgpt/`、`doubao/`）
 
+> **本机坑（macOS）**：`/usr/bin/git` 是 Xcode 包装器，未同意许可时会直接报错退出，
+> 且 `sudo xcodebuild -license accept` 需要管理员身份。两条出路：
+> ① 一劳永逸：`sudo xcodebuild -license accept`；
+> ② 立即可用：`GIT=/Applications/Xcode.app/Contents/Developer/usr/bin/git`（Apple Git 2.54.0，免许可、免 sudo）。
+> `scripts/first-publish.sh` 已内置自动挑选，二选一都不影响后续命令。
+
 ### Step 9 — 创建 GitHub 仓库并推送
+
+**路线 A（有 gh）**
 
 ```bash
 gh repo create universal-agent-rules --public --source=. --remote=origin --push
 ```
+
+**路线 B（无 gh / 没装 brew，推荐 SSH——本机即此情形）**
+
+```bash
+# 1) 建密钥（只做一次）
+ssh-keygen -t ed25519 -C "you@example.com"        # 一路回车
+
+# 2) 公钥加到 GitHub：https://github.com/settings/ssh/new
+cat ~/.ssh/id_ed25519.pub
+
+# 3) 网页 https://github.com/new 建空仓库（Public，切勿勾选 README/LICENSE/.gitignore）
+
+# 4) 推送（本机请用 Xcode 内嵌 git）
+GIT=/Applications/Xcode.app/Contents/Developer/usr/bin/git
+cd ~/Documents/agent-rules
+$GIT remote add origin git@github.com:<你的用户名>/universal-agent-rules.git
+$GIT push -u origin main
+$GIT push origin v0.1.0
+```
+
+> 一行等价写法：`REMOTE=git@github.com:<你的用户名>/universal-agent-rules.git bash scripts/first-publish.sh`
+> 脚本会按「已有远端 → 给定 REMOTE → 有 gh → 打印 SSH 手工步骤」四档自动降级。
 
 仓库设置（网页或 `gh repo edit`）：
 
